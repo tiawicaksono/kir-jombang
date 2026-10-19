@@ -116,27 +116,27 @@ class SiteController extends Controller
         $criteriatotalRetribusi->addCondition("tgl_pad = TO_DATE('" . $tgl . "', 'DD-Mon-YY')");
         $dataPad = VLapPad::model()->find($criteriatotalRetribusi);
         if (!empty($dataPad)) {
-            $totalRetribusi = $dataPad->total;
+            $totalRetribusi = (float) ($dataPad->total ?? 0);
         }
         if (!empty($dataPad)) {
-            $totalKendaraan = $dataPad->jum_kend;
+            $totalKendaraan = (int) ($dataPad->jum_kend ?? 0);
         }
 
         $criteriaRetribusiBulan = new CDbCriteria();
-        $criteriaRetribusiBulan->select = "SUM(total) AS total";
+        $criteriaRetribusiBulan->select = "COALESCE(SUM(total), 0) AS total";
         $criteriaRetribusiBulan->addCondition("bulan = " . date('n'));
         $criteriaRetribusiBulan->addCondition("tahun = " . date('Y'));
         $dataRetribusiBulan = VLapPad::model()->find($criteriaRetribusiBulan);
         if (!empty($dataRetribusiBulan)) {
-            $totalRetribusiBulan = $dataRetribusiBulan->total;
+            $totalRetribusiBulan = (float) ($dataRetribusiBulan->total ?? 0);
         }
 
         $criteriaRetribusiTahun = new CDbCriteria();
-        $criteriaRetribusiTahun->select = "SUM(total) AS total";
+        $criteriaRetribusiTahun->select = "COALESCE(SUM(total), 0) AS total";
         $criteriaRetribusiTahun->addCondition("tahun = " . date('Y'));
         $dataRetribusiTahun = VLapPad::model()->find($criteriaRetribusiTahun);
         if (!empty($dataRetribusiTahun)) {
-            $totalRetribusiTahun = $dataRetribusiTahun->total;
+            $totalRetribusiTahun = (float) ($dataRetribusiTahun->total ?? 0);
         }
         //        $totalKendaraanU = TblDaftar::model()->totalKedatanganKendaraan($tgl, 'true');
         //        $totalKendaraanBu = TblDaftar::model()->totalKedatanganKendaraan($tgl, 'false');
@@ -162,16 +162,16 @@ class SiteController extends Controller
         $tahun = date('Y');
         $bulan = date('n');
         $criteria = new CDbCriteria();
-        $criteria->select = 'SUM(jum_kend) as jum_kend';
+        $criteria->select = 'COALESCE(SUM(jum_kend), 0) as jum_kend';
         $criteria->addCondition("tahun =" . $tahun);
         $criteria->addCondition("bulan =" . $bulan);
         $dataSumPerBulan = VLapPad::model()->find($criteria);
-        $totalKendaraanPerBulan = !empty($dataSumPerBulan) ? $dataSumPerBulan->jum_kend : 0;
+        $totalKendaraanPerBulan = (int) ($dataSumPerBulan->jum_kend ?? 0);
         $criteria = new CDbCriteria();
-        $criteria->select = 'SUM(jum_kend) as jum_kend';
+        $criteria->select = 'COALESCE(SUM(jum_kend), 0) as jum_kend';
         $criteria->addCondition("tahun =" . $tahun);
         $dataSumPerTahun = VLapPad::model()->find($criteria);
-        $totalKendaraanPerTahun = !empty($dataSumPerTahun) ? $dataSumPerTahun->jum_kend : 0;
+        $totalKendaraanPerTahun = (int) ($dataSumPerTahun->jum_kend ?? 0);
 
         $this->render('index', array(
             //            'dataEmployee' => $employee,

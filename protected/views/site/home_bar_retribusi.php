@@ -47,15 +47,11 @@
                             <?php
                             for ($bln = 1; $bln <= 12; $bln++) :
                                 $criteria = new CDbCriteria();
-                                $criteria->select = 'SUM(jum_kend) as jum_kend';
+                                $criteria->select = 'COALESCE(SUM(jum_kend), 0) as jum_kend';
                                 $criteria->addCondition("tahun =" . $tahun);
                                 $criteria->addCondition("bulan =" . $bln);
                                 $dataSum = VLapPad::model()->find($criteria);
-                                if (empty($dataSum)) {
-                                    echo '0,';
-                                } else {
-                                    echo $dataSum->jum_kend . ', ';
-                                }
+                                echo (int) ($dataSum->jum_kend ?? 0) . ', ';
                             endfor;
                             ?>
                         ]

@@ -17,6 +17,8 @@ jobs:
         run: docker build -t app-test .
       - name: Runtime and library smoke tests
         run: docker run --rm app-test php tests/smoke/runtime.php
+      - name: Dashboard empty-data regression
+        run: docker run --rm app-test php tests/smoke/dashboard.php
       - name: HTTP and access boundary smoke tests
         run: bash tests/smoke/container.sh app-test
   build:

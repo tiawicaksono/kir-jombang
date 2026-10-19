@@ -5,6 +5,8 @@
 .env
 .env.*
 !.env.example
+backups
+db_pkb_backup_*
 vendor
 yii
 protected/extensions/PHPExcel
