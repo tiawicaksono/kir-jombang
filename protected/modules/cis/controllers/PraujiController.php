@@ -112,70 +112,11 @@ class PraujiController extends Controller {
     public function actionSaveCapture() {
         $idhasil = $_POST['id_hasil_uji'];
 
-        $ip_depan = 'http://192.168.0.53';
-        $depan_content = 'http://admin:sampang123@192.168.0.53/ISAPI/Streaming/channels/1/picture';
-        $ip_belakang = 'http://192.168.0.51';
-        $belakang_content = 'http://admin:sampang123@192.168.0.51/ISAPI/Streaming/channels/1/picture';
-        $ip_kanan = 'http://192.168.0.50';
-        $kanan_content = 'http://admin:sampang123@192.168.0.50/ISAPI/Streaming/channels/1/picture';
-        $ip_kiri = 'http://192.168.0.52';
-        $kiri_content = 'http://admin:sampang123@192.168.0.52/ISAPI/Streaming/channels/1/picture';
+        $img_depan = CameraSnapshot::capture('CAMERA_FRONT_URL');
+        $img_belakang = CameraSnapshot::capture('CAMERA_REAR_URL');
+        $img_kanan = CameraSnapshot::capture('CAMERA_RIGHT_URL');
+        $img_kiri = CameraSnapshot::capture('CAMERA_LEFT_URL');
 
-        $ch_depan = curl_init($ip_depan);
-        curl_setopt($ch_depan, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch_depan, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch_depan, CURLOPT_RETURNTRANSFER, true);
-        curl_exec($ch_depan);
-        $httpdcode_depan = curl_getinfo($ch_depan, CURLINFO_HTTP_CODE);
-        curl_close($ch_depan);
-        if ($httpdcode_depan != 0) {
-            $gmb_depan = file_get_contents($depan_content);
-            $img_depan = base64_encode($gmb_depan);
-        } else {
-            $img_depan = '';
-        }
-        
-        $ch_belakang = curl_init($ip_belakang);
-        curl_setopt($ch_belakang, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch_belakang, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch_belakang, CURLOPT_RETURNTRANSFER, true);
-        $data_belakang = curl_exec($ch_belakang);
-        $httpdcode_belakang = curl_getinfo($ch_belakang, CURLINFO_HTTP_CODE);
-        curl_close($ch_belakang);
-        if ($httpdcode_belakang != 0) {
-            $gmb_belakang = file_get_contents($belakang_content);
-            $img_belakang = base64_encode($gmb_belakang);
-        } else {
-            $img_belakang = '';
-        }
-
-        $ch_kanan = curl_init($ip_kanan);
-        curl_setopt($ch_kanan, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch_kanan, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch_kanan, CURLOPT_RETURNTRANSFER, true);
-        $data_kanan = curl_exec($ch_kanan);
-        $httpdcode_kanan = curl_getinfo($ch_kanan, CURLINFO_HTTP_CODE);
-        curl_close($ch_kanan);
-        if ($httpdcode_kanan != 0) {
-            $gmb_kanan = file_get_contents($kanan_content);
-            $img_kanan = base64_encode($gmb_kanan);
-        } else {
-            $img_kanan = '';
-        }
-
-        $ch_kiri = curl_init($ip_kiri);
-        curl_setopt($ch_kiri, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch_kiri, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch_kiri, CURLOPT_RETURNTRANSFER, true);
-        $data_kiri = curl_exec($ch_kiri);
-        $httpdcode_kiri = curl_getinfo($ch_kiri, CURLINFO_HTTP_CODE);
-        curl_close($ch_kiri);
-        if ($httpdcode_kiri != 0) {
-            $gmb_kiri = file_get_contents($kiri_content);
-            $img_kiri = base64_encode($gmb_kiri);
-        } else {
-            $img_kiri = '';
-        }
         $proses = "UPDATE tbl_hasil_uji set img_depan='" . $img_depan . "',img_belakang='" . $img_belakang . "',img_kiri='" . $img_kiri . "',img_kanan='" . $img_kanan . "' where id_hasil_uji=" . $idhasil;
         Yii::app()->db->createCommand($proses)->execute();
 

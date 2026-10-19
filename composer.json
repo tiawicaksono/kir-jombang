@@ -1,0 +1,21 @@
+{
+  "name": "kominfo/app-031-uji-kir",
+  "description": "Runtime dependencies for the PKB Yii application",
+  "type": "project",
+  "require": {
+    "php": "~8.4.0",
+    "ext-pdo_pgsql": "*",
+    "ext-curl": "*",
+    "ext-gd": "*",
+    "ext-mbstring": "*",
+    "ext-zip": "*",
+    "ext-calendar": "*",
+    "yiisoft/yii": "1.1.32",
+    "phpoffice/phpspreadsheet": "^5.8",
+    "mpdf/mpdf": "^8.2"
+  },
+  "config": {
+    "allow-plugins": false,
+    "sort-packages": true
+  }
+}

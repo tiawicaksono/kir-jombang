@@ -156,7 +156,7 @@ class RGenerator extends CApplicationComponent
 			$controllerDirectory = scandir($path);
 			foreach( $controllerDirectory as $entry )
 			{
-				if( $entry{0}!=='.' )
+				if( $entry[0]!=='.' )
 				{
 					$entryPath = $path.DIRECTORY_SEPARATOR.$entry;
 					if( strpos(strtolower($entry), 'controller')!==false )

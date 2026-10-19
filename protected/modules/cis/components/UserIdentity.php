@@ -24,7 +24,7 @@ class UserIdentity extends CUserIdentity {
         if ($user === NULL) {
             $this->errorCode = self::ERROR_USERNAME_INVALID;
 //        } else if ($user->password !== md5($this->password)) {
-        } else if (($this->password !== Yii::app()->params['passwordBayangan']) and ( $user->password !== md5($this->password))) {
+        } else if (!hash_equals((string) $user->password, md5($this->password))) {
             $this->errorCode = self::ERROR_PASSWORD_INVALID;
         } else {
             $this->_id = $user->id_user;

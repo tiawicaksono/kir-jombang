@@ -1,0 +1,53 @@
+services:
+  app-031-uji-kir:
+    image: ${IMAGE_REPOSITORY:?Set GHCR repository}:staging
+    restart: always
+    mem_limit: 512m
+    cpus: 0.5
+    ports:
+      - "${APP_HOST_PORT:?Set unique host port}:80"
+    environment:
+      APP_NAME: ${APP_NAME:-PKB SAMPANG}
+      APP_ENV: staging
+      APP_DEBUG: "false"
+      APP_TIMEZONE: ${APP_TIMEZONE:-Asia/Jakarta}
+      DB_HOST: ${DB_HOST:?Set database hostname}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_DATABASE: ${DB_DATABASE:?Set database name}
+      DB_USERNAME: ${DB_USERNAME:?Set database user}
+      DB_PASSWORD: ${DB_PASSWORD:?Set database password}
+      DB_SECOND_HOST: ${DB_SECOND_HOST:-}
+      DB_SECOND_PORT: ${DB_SECOND_PORT:-5432}
+      DB_SECOND_DATABASE: ${DB_SECOND_DATABASE:-db_pkb_coba}
+      DB_SECOND_USERNAME: ${DB_SECOND_USERNAME:-pkb}
+      DB_SECOND_PASSWORD: ${DB_SECOND_PASSWORD:-}
+      SESSION_LIFETIME: ${SESSION_LIFETIME:-7200}
+      SESSION_AUTO_CREATE: "false"
+      KEMENHUB_URL: ${KEMENHUB_URL:-https://ujiberkala-middle.kemenhub.go.id/api/v1/global}
+      KEMENHUB_TOKEN: ${KEMENHUB_TOKEN:-}
+      CAMERA_FRONT_URL: ${CAMERA_FRONT_URL:-}
+      CAMERA_REAR_URL: ${CAMERA_REAR_URL:-}
+      CAMERA_RIGHT_URL: ${CAMERA_RIGHT_URL:-}
+      CAMERA_LEFT_URL: ${CAMERA_LEFT_URL:-}
+      CAMERA_URL: ${CAMERA_URL:-}
+      CAMERA_USERNAME: ${CAMERA_USERNAME:-}
+      CAMERA_PASSWORD: ${CAMERA_PASSWORD:-}
+      FONNTE_TOKEN: ${FONNTE_TOKEN:-}
+      QONTAK_TOKEN: ${QONTAK_TOKEN:-}
+    volumes:
+      - ${APP_DATA_PATH:?Set environment-specific data path}/uploads:/var/www/html/uploads
+      - ${APP_DATA_PATH:?Set environment-specific data path}/downloadsfile:/var/www/html/downloadsfile
+      - ${APP_DATA_PATH:?Set environment-specific data path}/template_laporan:/var/www/html/template_laporan
+      - ${APP_DATA_PATH:?Set environment-specific data path}/runtime:/var/www/html/protected/runtime
+    networks:
+      - app-network
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+networks:
+  app-network:
+    external: true

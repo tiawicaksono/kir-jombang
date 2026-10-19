@@ -100,7 +100,7 @@ class LampuController extends Controller {
         $username = $_POST['username'];
         $img1 = '';
         $img2 = '';
-//        $ip_depan = 'http://192.168.50.5';
+//        $ip_depan = pkbEnv('CAMERA_URL', '');
 //        $ch_depan = curl_init($ip_depan);
 //        curl_setopt($ch_depan, CURLOPT_TIMEOUT, 5);
 //        curl_setopt($ch_depan, CURLOPT_CONNECTTIMEOUT, 5);
@@ -109,13 +109,13 @@ class LampuController extends Controller {
 //        $httpdcode_depan = curl_getinfo($ch_depan, CURLINFO_HTTP_CODE);
 //        curl_close($ch_depan);
 //        if($httpdcode_depan != 0){
-//            $gmb_depan = file_get_contents('http://admin:1234567890ok@192.168.50.5/SnapshotJPEG?Resolution=320x240');
+//            $gmb_depan = file_get_contents(pkbEnv('CAMERA_URL', ''));
 //            $img1 = base64_encode($gmb_depan);
 //        }else{
 //            $img1 = '';
 //        }
 //        
-//        $ip_belakang = 'http://192.168.50.6';
+//        $ip_belakang = pkbEnv('CAMERA_URL', '');
 //        $ch_belakang = curl_init($ip_belakang);
 //        curl_setopt($ch_belakang, CURLOPT_TIMEOUT, 5);
 //        curl_setopt($ch_belakang, CURLOPT_CONNECTTIMEOUT, 5);
@@ -124,7 +124,7 @@ class LampuController extends Controller {
 //        $httpdcode_belakang = curl_getinfo($ch_belakang, CURLINFO_HTTP_CODE);
 //        curl_close($ch_belakang);
 //        if($httpdcode_belakang != 0){
-//            $gmb_belakang = file_get_contents('http://admin:1234567890ok@192.168.50.6/SnapshotJPEG?Resolution=320x240');
+//            $gmb_belakang = file_get_contents(pkbEnv('CAMERA_URL', ''));
 //            $img2 = base64_encode($gmb_belakang);
 //        }else{
 //            $img2 = '';

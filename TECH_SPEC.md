@@ -2,6 +2,8 @@
 
 > Tanggal analisis: 14 Oktober 2026. Metode: pemeriksaan statis repository; bukan hasil pengujian terhadap database/server produksi. **Terbukti** berarti ada implementasi di kode; **inferensi** berarti disimpulkan dari pemakaian; **rekomendasi** berarti perubahan yang belum diimplementasikan. Contoh data bersifat sintetis. Nilai kredensial sengaja tidak disalin.
 
+> Implementasi deployment ditambahkan setelah analisis awal: lihat [panduan deployment](deploy/README.md) untuk runtime Composer/PHP 8.4, workflow, perubahan konfigurasi, dan batas pengujian terbaru. Uraian inventaris lama di bawah mencatat kondisi sebelum perubahan ini.
+
 Dokumen terkait: [PRD](PRD.md) · [Arsitektur](TECH_SPEC.md) · [Database](DATABASE_SCHEMA.md) · [Kontrak endpoint](API_CONTRACT.md) · [UI/UX](UI_UX_GUIDELINES.md).
 
 **Daftar isi**

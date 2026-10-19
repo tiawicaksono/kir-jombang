@@ -52,7 +52,7 @@ class ReportController extends Controller {
         //buka file rtf
         $webroot = Yii::getPathOfAlias('webroot');
         $template = $webroot . "/template_laporan/".$file;
-        $handle = fopen($template, "r+");
+        $handle = fopen($template, "r");
         $hasilbaca = fread($handle, filesize($template));
         fclose($handle);
 
@@ -96,11 +96,11 @@ class ReportController extends Controller {
         $hasilbaca = str_replace('data_hal', $data_hal, $hasilbaca);
 
         //membuat file baru dari hasil baca
-        $hasil = "hasil_laporan.doc";
+        $hasil = $path . "/hasil_laporan_" . bin2hex(random_bytes(8)) . ".doc";
         $handle = fopen($hasil, "w+");
         fwrite($handle, $hasilbaca);
         fclose($handle);
-        header('Location: http://192.168.30.50/pkbsurabaya/' . $hasil);
+        $this->redirect(Yii::app()->request->baseUrl . '/template_laporan/hasil/' . basename($hasil));
     }
 
 //    ============================================================================

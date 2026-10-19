@@ -37,26 +37,26 @@ class PengujianController extends Controller
         $tglAkhirIndonesia = date("d", strtotime($tgl_akhir)) . " " . strtoupper(Yii::app()->params['bulanArrayInd'][date("n", strtotime($tgl_akhir)) - 1]) . " " . date("Y", strtotime($tgl_akhir));
 
         //======================================================================
-        Yii::import("ext.PHPExcel", TRUE);
-        $xls = new PHPExcel();
+
+        $xls = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $xls->setActiveSheetIndex(0);
         $sheet = $xls->getActiveSheet();
         //======================================================================
         $styleCenter = array(
             'alignment' => array(
-                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
             )
         );
         $styleVerticalCenter = array(
             'alignment' => array(
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
             )
         );
         $styleBorder = array(
             'borders' => array(
-                'allborders' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
                 )
             )
         );
@@ -64,8 +64,8 @@ class PengujianController extends Controller
         /*
          * HEADER TERDAFTAR
          */
-        $sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
-        // $sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
         $sheet->getPageSetup()->setFitToPage(false);
         $sheet->getPageSetup()->setHorizontalCentered(true);
         $sheet->getPageSetup()->setScale(82);
@@ -90,86 +90,86 @@ class PengujianController extends Controller
         //======================================================================
         $sheet->getRowDimension(6)->setRowHeight(40);
         $sheet->setCellValue("A6", "NO");
-        $sheet->getStyle("A6")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("A6")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
-        $sheet->getStyle("A")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("A")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("A6")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("A6")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("A")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("A")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getColumnDimension("A")->setWidth(5);
         //=====================================================================================================
         $sheet->setCellValue("B6", "JENIS KEND");
         $sheet->getStyle("B6")->getAlignment()->setWrapText(true);
-        $sheet->getStyle("B6")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("B6")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
-        $sheet->getStyle("B")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("B6")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("B6")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("B")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getColumnDimension("B")->setAutoSize(true);
         //=====================================================================================================
         $sheet->setCellValue("C6", "MERK / TIPE");
         $sheet->getStyle("C6")->getAlignment()->setWrapText(true);
-        $sheet->getStyle("C6")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("C6")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
-        $sheet->getStyle("C")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("C6")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("C6")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("C")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getColumnDimension("C")->setAutoSize(true);
         //=====================================================================================================
         $sheet->setCellValue("D6", "TAHUN");
         $sheet->getStyle("D6")->getAlignment()->setWrapText(true);
-        $sheet->getStyle("D6")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("D6")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
-        $sheet->getStyle("D")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("D")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("D6")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("D6")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("D")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("D")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getColumnDimension("A")->setWidth(10);
         //=====================================================================================================
         $sheet->setCellValue("E6", "NO UJI");
         $sheet->getStyle("E6")->getAlignment()->setWrapText(true);
-        $sheet->getStyle("E6")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("E6")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
-        $sheet->getStyle("E")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("E6")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("E6")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("E")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getColumnDimension("E")->setAutoSize(true);
         //=====================================================================================================
         $sheet->setCellValue("F6", "NO KEND");
         $sheet->getStyle("F6")->getAlignment()->setWrapText(true);
-        $sheet->getStyle("F6")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("F6")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
-        $sheet->getStyle("F")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("F6")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("F6")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("F")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getColumnDimension("F")->setAutoSize(true);
         //=====================================================================================================
         $sheet->setCellValue("G6", "NO CHASIS");
         $sheet->getStyle("G6")->getAlignment()->setWrapText(true);
-        $sheet->getStyle("G6")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("G6")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
-        $sheet->getStyle("G")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("G6")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("G6")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("G")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getColumnDimension("G")->setAutoSize(true);
         //=====================================================================================================
         $sheet->setCellValue("H6", "NO MESIN");
         $sheet->getStyle("H6")->getAlignment()->setWrapText(true);
-        $sheet->getStyle("H6")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("H6")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
-        $sheet->getStyle("H")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("H6")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("H6")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("H")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getColumnDimension("H")->setAutoSize(true);
         //=====================================================================================================
         $sheet->setCellValue("I6", "NAMA PEMILIK");
         $sheet->getStyle("I6")->getAlignment()->setWrapText(true);
-        $sheet->getStyle("I6")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("I6")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
-        $sheet->getStyle("I")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("I6")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("I6")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("I")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getColumnDimension("I")->setAutoSize(true);
         //=====================================================================================================
         $sheet->setCellValue("J6", "ALAMAT");
         $sheet->getStyle("J6")->getAlignment()->setWrapText(true);
-        $sheet->getStyle("J6")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("J6")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
-        $sheet->getStyle("J")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("J6")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("J6")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("J")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getColumnDimension("J")->setAutoSize(true);
         //=====================================================================================================
         $sheet->setCellValue("K6", "STATUS");
         $sheet->getStyle("K6")->getAlignment()->setWrapText(true);
-        $sheet->getStyle("K6")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("K6")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
-        $sheet->getStyle("K")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("K6")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("K6")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("K")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getColumnDimension("K")->setAutoSize(true);
         //=====================================================================================================
 
         $sheet->getStyle("A6:K6")->applyFromArray($styleCenter);
-        $sheet->getStyle("A6:K6")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('b3c6cf');
+        $sheet->getStyle("A6:K6")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('b3c6cf');
         //END HEADER
         //======================================================================
         //======================================================================
@@ -202,8 +202,8 @@ class PengujianController extends Controller
         //======================================================================
         $styleArray = array(
             'borders' => array(
-                'allborders' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
                 )
             )
         );
@@ -222,7 +222,7 @@ class PengujianController extends Controller
         header('Cache-Control: cache, must-revalidate');
         header('Pragma: public');
 
-        $xlsWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
+        $xlsWriter = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($xls, 'Xls');
         $xlsWriter->save('php://output');
         Yii::app()->end();
     }
@@ -282,8 +282,8 @@ class PengujianController extends Controller
     public function actionExportExcelBukuUji()
     {
         $tgl = $_GET['tgl_report'];
-        Yii::import("ext.PHPExcel", TRUE);
-        $xls = new PHPExcel();
+
+        $xls = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $xls->getActiveSheet();
         //======================================================================
         //HEADER
@@ -334,7 +334,7 @@ class PengujianController extends Controller
         header('Cache-Control: cache, must-revalidate');
         header('Pragma: public');
 
-        $xlsWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
+        $xlsWriter = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($xls, 'Xls');
         $xlsWriter->save('php://output');
         Yii::app()->end();
     }

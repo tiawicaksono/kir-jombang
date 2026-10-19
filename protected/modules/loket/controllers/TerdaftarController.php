@@ -76,12 +76,12 @@ class TerdaftarController extends Controller {
     public function actionReportTerdaftarExcel() {
         $selectDate = strtoupper($_GET['tgl']);
         $tglIndonesia = date("d", strtotime($selectDate)) . " " . strtoupper(Yii::app()->params['bulanArrayInd'][date("n", strtotime($selectDate)) - 1]) . " " . date("Y", strtotime($selectDate));
-        Yii::import("ext.PHPExcel", TRUE);
-        $xls = new PHPExcel();
+
+        $xls = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $xls->getActiveSheet();
         $xls->setActiveSheetIndex(0);
-//        $sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_PORTRAIT);
-//        $sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+//        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
+//        $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
 //        $sheet->getPageSetup()->setFitToPage(false);
 //        $sheet->getPageSetup()->setHorizontalCentered(true);
 //        $sheet->getPageSetup()->setVerticalCentered(true);
@@ -89,41 +89,41 @@ class TerdaftarController extends Controller {
         //======================================================================
         $styleTengah = array(
             'alignment' => array(
-                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
         ));
         $styleTengahHorizontal = array(
             'alignment' => array(
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
         ));
         //======================================================================
         //HEADER
         $sheet->mergeCells("A1:J1");
         $sheet->setCellValue("A1", "DINAS PERHUBUNGAN");
         $sheet->getStyle("A1")->getFont()->setSize(16);
-        $sheet->getStyle("A1")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("A1")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("A1")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("A1")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getStyle("A1")->getFont()->setBold(true);
 
         $sheet->mergeCells("A2:J2");
         $sheet->setCellValue("A2", "PENGUJIAN KENDARAAN BERMOTOR - KABUPATEN SAMPANG");
         $sheet->getStyle("A2")->getFont()->setSize(16);
-        $sheet->getStyle("A2")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("A2")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("A2")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("A2")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getStyle("A2")->getFont()->setBold(true);
 
         $sheet->mergeCells("A3:J3");
         $sheet->setCellValue("A3", "LAPORAN KENDARAAN TERDAFTAR UJI");
         $sheet->getStyle("A3")->getFont()->setSize(12);
-        $sheet->getStyle("A3")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("A3")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("A3")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("A3")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getStyle("A3")->getFont()->setBold(true);
 
         $sheet->mergeCells("A4:J4");
         $sheet->setCellValue("A4", $tglIndonesia);
         $sheet->getStyle("A4")->getFont()->setSize(12);
-        $sheet->getStyle("A4")->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER));
-        $sheet->getStyle("A4")->getAlignment()->applyFromArray(array('vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $sheet->getStyle("A4")->getAlignment()->applyFromArray(array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER));
+        $sheet->getStyle("A4")->getAlignment()->applyFromArray(array('vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER));
         $sheet->getStyle("A4")->getFont()->setBold(true);
 
         $sheet->setCellValue("A6", "NO");
@@ -193,7 +193,7 @@ class TerdaftarController extends Controller {
         $sheet->getStyle("J")->getAlignment()->setWrapText(true);
         $sheet->getColumnDimension('J')->setWidth(15);
 
-        $sheet->getStyle('A6:J6')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('b3c6cf');
+        $sheet->getStyle('A6:J6')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('b3c6cf');
         //END HEADER
         //======================================================================
 
@@ -224,8 +224,8 @@ class TerdaftarController extends Controller {
         //======================================================================
         $styleArray = array(
             'borders' => array(
-                'allborders' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
                 )
             )
         );
@@ -249,7 +249,7 @@ class TerdaftarController extends Controller {
         header('Cache-Control: cache, must-revalidate');
         header('Pragma: public');
 
-        $xlsWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
+        $xlsWriter = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($xls, 'Xls');
         $xlsWriter->save('php://output');
         Yii::app()->end();
     }

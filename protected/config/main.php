@@ -1,13 +1,14 @@
 <?php
+require_once __DIR__ . "/environment.php";
 
 // uncomment the following to define a path alias
 // Yii::setPathOfAlias('local','path/to/local-folder');
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
-return array(
-    'timeZone' => 'Asia/Jakarta',
+$config = array(
+    'timeZone' => pkbEnv('APP_TIMEZONE', 'Asia/Jakarta'),
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
-    'name' => 'PKB SAMPANG',
+    'name' => pkbEnv('APP_NAME', 'PKB SAMPANG'),
     // preloading 'log' component
     'preload' => array('log'),
     // autoloading model and component classes
@@ -34,15 +35,8 @@ return array(
         'pengukuran',
         'display',
         'cis',
-        'va',
         'master',
-        // uncomment the following to enable the Gii tool
-        'gii' => array(
-            'class' => 'system.gii.GiiModule',
-            'password' => 'h3l10s',
-            // If removed, Gii defaults to localhost only. Edit carefully to taste.
-            'ipFilters' => array('192.168.*.*', '*'),
-        ),
+        // Developer tooling is deliberately omitted from the deployed application.
         'rights' => array(
             'install' => false,
             'userClass' => 'TblUser',
@@ -55,9 +49,9 @@ return array(
         'appComponent' => array('class' => 'AppComponent'),
         'session' => array(
             'class' => 'CDbHttpSession', //Set class to CDbHttpSession
-            'timeout' => 7200, //Any time, in seconds,
+            'timeout' => (int) pkbEnv('SESSION_LIFETIME', '7200'), //Any time, in seconds,
             'connectionID' => 'db',
-            'autoCreateSessionTable' => true,
+            'autoCreateSessionTable' => pkbBool('SESSION_AUTO_CREATE', false),
         ),
         'user' => array(
             // enable cookie-based authentication
@@ -145,14 +139,18 @@ return array(
         // this is used in contact page
         'adminEmail' => 'wicaksono.tia@gmail.com',
         'tahunGrafik' => date('Y') - 2,
-        'passwordBayangan' => 'h3l10s',
-        'namaAplikasi' => 'PKB SAMPANG',
+        'namaAplikasi' => pkbEnv('APP_NAME', 'PKB SAMPANG'),
         'bulanRomawi' => array("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"),
         'bulanArray' => array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
         'blnArrayInd' => array("Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agust", "Sep", "Okt", "Nov", "Des"),
         'bulanArrayInd' => array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"),
         'hariArrayInd' => array("Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"),
-        'tokenApi' => 'eyJpdiI6IkFWTVVnUU9XOWx0cnFJeWRxOU9KdWc9PSIsInZhbHVlIjoiMmJkQ0Vpa25SdjZBb0NkUTMrRVpWRFVjWDZMa2dlcmFmeGZUL0lOR3VrQzdLMXhDUjN1ZGRvci9oWFNsbDFTejZuL1pnZWNBQXpWM3ozOFp0SEh3REJrNzZxM29TTDFnTlJKdVRtdCtxODJwWGxRV3FCR0hkcGFIM3l1YndSKzYiLCJtYWMiOiJhZWYzNmUzMTcxZmIwOWFmOWZkMDAwZjUyMzUxOThhZmYwNGJjMDk4MjA0YjIyYWZlMjM5ZmQ4NjdjZGYyODk1In0=',
-        'urlApi' => 'https://ujiberkala-middle.kemenhub.go.id/api/v1/global'
+        'tokenApi' => pkbEnv('KEMENHUB_TOKEN', ''),
+        'urlApi' => pkbEnv('KEMENHUB_URL', 'https://ujiberkala-middle.kemenhub.go.id/api/v1/global')
     ),
 );
+
+if (pkbEnv("DB_SECOND_HOST", "") === "") {
+    unset($config["components"]["dbcoba"]);
+}
+return $config;

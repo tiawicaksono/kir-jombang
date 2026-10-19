@@ -21,14 +21,14 @@ class BapTlController extends Controller
         $id_hasil_uji = $_GET['id_hasil_uji'];
         $data = VVerifikasi::model()->findByAttributes(array('id_hasil_uji' => $id_hasil_uji));
         $dataUji = VPrintHasil::model()->findByAttributes(array('id_hasil_uji' => $id_hasil_uji));
-        Yii::import("ext.PHPExcel", TRUE);
-        $xls = new PHPExcel();
+
+        $xls = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $xls->createSheet(0);
         $xls->setActiveSheetIndex(0);
         $sheet = $xls->getActiveSheet();
         $sheet->setTitle('Riwayat Pemeriksaan');
-        $sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_PORTRAIT);
-        $sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
+        $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
         $sheet->getPageSetup()->setFitToPage(false);
         $sheet->getPageSetup()->setHorizontalCentered(true);
         // $sheet->getPageSetup()->setVerticalCentered(true);
@@ -36,18 +36,18 @@ class BapTlController extends Controller
         //======================================================================
         $styleTengah = array(
             'alignment' => array(
-                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
             )
         );
         $styleTengahHorizontal = array(
             'alignment' => array(
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
             )
         );
         $styleTop = array(
             'alignment' => array(
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
             )
         );
         $styleFont9 = array(
@@ -758,8 +758,8 @@ class BapTlController extends Controller
         //BORDER
         $styleArray = array(
             'borders' => array(
-                'allborders' => array(
-                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                'allBorders' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
                 )
             )
         );
@@ -779,7 +779,7 @@ class BapTlController extends Controller
         header('Cache-Control: cache, must-revalidate');
         header('Pragma: public');
 
-        $xlsWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
+        $xlsWriter = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($xls, 'Xls');
         $xlsWriter->save('php://output');
         Yii::app()->end();
     }

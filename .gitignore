@@ -6,3 +6,10 @@ uploads/
 .DS_Store
 yni/
 backups/
+# Runtime dependencies, local secrets, and generated files
+/vendor/
+/.env
+/.env.*
+!/.env.example
+/protected/runtime/
+/assets/

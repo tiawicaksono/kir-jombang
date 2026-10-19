@@ -52,7 +52,7 @@ abstract class MultiActiveRecord extends CActiveRecord
     public function tableName(){
         $tableName=get_class($this);
         $tableName=strtolower(substr($tableName,0,1)).substr($tableName,1);
-        $tableName=preg_replace_callback('/([A-Z])/',create_function('$matches','return "_".strtolower($matches[0]);'),$tableName);
+        $tableName=preg_replace_callback('/([A-Z])/',function ($matches) { return "_" . strtolower($matches[0]); },$tableName);
         return $tableName;
     }
     /**

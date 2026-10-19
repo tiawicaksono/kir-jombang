@@ -3,9 +3,23 @@
 class SiteController extends Controller
 {
 
-    /**
-     * Declares class-based actions.
-     */
+    // Liveness only: this route deliberately does not open a database session.
+    public function actionHealth()
+    {
+        header('Content-Type: application/json');
+        echo json_encode(array('status' => 'ok'));
+    }
+
+    public function actionError()
+    {
+        $error = Yii::app()->errorHandler->error;
+        if ($error !== null) {
+            http_response_code((int) $error['code']);
+            header('Content-Type: text/plain; charset=UTF-8');
+            echo $error['code'] >= 500 ? 'Terjadi kesalahan pada server.' : 'Permintaan tidak dapat diproses.';
+        }
+    }
+
     public function actions()
     {
         return array(
@@ -240,7 +254,7 @@ class SiteController extends Controller
                         ]
                     ]),
                     CURLOPT_HTTPHEADER => [
-                        "Authorization: Bearer dQ134MyvSqKgBvUiNR2Buw5OIyxL98nSIFIq9XnXIM0",
+                        "Authorization: Bearer " . pkbEnv("QONTAK_TOKEN", ""),
                         "Content-Type: application/json"
                     ],
                 ]);
@@ -255,8 +269,8 @@ class SiteController extends Controller
                 } else {
                     echo $response;
                 }
-                $file = Yii::getPathOfAlias('webroot') . '/log_wa.txt';
-                $text = file_get_contents($file);
+                $file = Yii::app()->runtimePath . '/log_wa.txt';
+                $text = is_file($file) ? file_get_contents($file) : '';
                 $data = date('d/m/Y H:i:s') . " = " . $response . "\n";
                 $text .= $data;
                 file_put_contents($file, $text);
@@ -294,7 +308,7 @@ class SiteController extends Controller
                 ]
             ]),
             CURLOPT_HTTPHEADER => [
-                "Authorization: Bearer dQ134MyvSqKgBvUiNR2Buw5OIyxL98nSIFIq9XnXIM0",
+                "Authorization: Bearer " . pkbEnv("QONTAK_TOKEN", ""),
                 "Content-Type: application/json"
             ],
         ]);
@@ -342,7 +356,7 @@ class SiteController extends Controller
         //             'countryCode' => '62', //optional
         //         ),
         //         CURLOPT_HTTPHEADER => array(
-        //             'Authorization: q#jK6VTGKEQEvK9yGuce' //change TOKEN to your actual token
+        //             'Authorization: ' . pkbEnv('FONNTE_TOKEN', '') //change TOKEN to your actual token
         //         ),
         //     ));
         //     $response = curl_exec($curl);
@@ -356,8 +370,8 @@ class SiteController extends Controller
 
         //     $sql = "update tbl_kendaraan set stts_kirim_wa = true where id_kendaraan in ($id_kendaraan)";
         //     Yii::app()->db->createCommand($sql)->execute();
-        //     $file = Yii::getPathOfAlias('webroot') . '/log_wa.txt';
-        //     $text = file_get_contents($file);
+        //     $file = Yii::app()->runtimePath . '/log_wa.txt';
+        //     $text = is_file($file) ? file_get_contents($file) : '';
         //     $data = date('d/m/Y H:i:s') . " = " . $respon . "\n";
         //     $text .= $data;
         //     file_put_contents($file, $text);
@@ -388,7 +402,7 @@ class SiteController extends Controller
                 'countryCode' => '62', //optional
             ),
             CURLOPT_HTTPHEADER => array(
-                'Authorization: q#jK6VTGKEQEvK9yGuce' //change TOKEN to your actual token
+                'Authorization: ' . pkbEnv('FONNTE_TOKEN', '') //change TOKEN to your actual token
             ),
         ));
         $response = curl_exec($curl);
