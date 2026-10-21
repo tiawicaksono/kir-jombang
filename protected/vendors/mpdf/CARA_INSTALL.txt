@@ -1,1 +1,0 @@
-yum install php-mbstring.x86_64
