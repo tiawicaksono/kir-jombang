@@ -5,9 +5,11 @@ services:
     restart: always
     mem_limit: 4096m
     cpus: 2.0
-    stop_grace_period: 40s
+    stop_grace_period: 130s
     ports:
       - "8071:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       APP_NAME: "Uji KIR"
       APP_ENV: production

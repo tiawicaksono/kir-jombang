@@ -15,6 +15,7 @@ Nama stack/container: **app-031-uji-kir**. Port host **8071**, port container **
 | `.github/workflows/production.yml` | Test, approval Environment, lalu publish `production` |
 | `compose.staging.yaml` | Stack untuk server-dev-stg-63 |
 | `compose.production.yaml` | Stack untuk server-prod-9 |
+| `app-031-uji-kir.conf` | Konfigurasi Nginx Reverse Proxy (SSL, WebSocket, proxy headers) |
 
 Image: `ghcr.io/kominfo-jombang/app-031-uji-kir`.
 Runtime tidak membutuhkan source bind mount atau Node.js. Aset sudah dibangun di image.
@@ -56,11 +57,15 @@ Setiap build juga menghasilkan tag `<branch>-<full-SHA>-<run-id>-<attempt>`. Tag
 7. Siapkan direktori storage melalui terminal server (pilih perintah sesuai target):
 
 ```sh
-# server-dev-stg-63
+# server-dev-stg-63 (Staging)
 sudo mkdir -p /home/kominfo2025/data_app/app-031-uji-kir/staging/storage_data
+sudo chown -R 33:33 /home/kominfo2025/data_app/app-031-uji-kir/staging/storage_data
+sudo chmod -R 775 /home/kominfo2025/data_app/app-031-uji-kir/staging/storage_data
 
-# server-prod-9
+# server-prod-9 (Production)
 sudo mkdir -p /home/kominfo2025/data_app/app-031-uji-kir/production/storage_data
+sudo chown -R 33:33 /home/kominfo2025/data_app/app-031-uji-kir/production/storage_data
+sudo chmod -R 775 /home/kominfo2025/data_app/app-031-uji-kir/production/storage_data
 ```
 
 Entrypoint memperbaiki ownership folder writable untuk www-data. Jika memindahkan upload dari deployment lama, salin data publik yang relevan ke `storage_data/app/public`; jangan menyalin cache/framework lama. Database dan data Yii tidak diubah otomatis.
@@ -81,7 +86,7 @@ Entrypoint memperbaiki ownership folder writable untuk www-data. Jika memindahka
 | --- | --- |
 | `APP_KEY` | Key Laravel base64 yang permanen; berbeda per environment |
 | `APP_URL` | URL publik penuh, misalnya `https://domain-aplikasi` |
-| `DB_HOST` | DNS/container PostgreSQL atau alamat database |
+| `DB_HOST` | Host PostgreSQL: gunakan nama container (misal `postgres`) jika PostgreSQL di Docker, atau `host.docker.internal` / `172.19.0.1` jika PostgreSQL di host server yang sama. Hindari IP publik host pada mesin yang sama agar tidak terblokir routing loopback. |
 | `DB_DATABASE` | Nama database KIR sesuai target |
 | `DB_USERNAME` | Akun database aplikasi |
 | `DB_PASSWORD` | Password akun tersebut |
@@ -138,7 +143,208 @@ Jika memakai terminal di mesin lain, ganti 127.0.0.1 dengan IP server. Endpoint 
 
 Batas awal adalah RAM 512 MB dan CPU 0.5. Pantau **Stats** dan sesuaikan resource/worker berdasarkan beban, terutama saat pemrosesan gambar.
 
-## 6. Watchtower dan update berikutnya
+## 6. Konfigurasi Nginx Reverse Proxy (app-031-uji-kir.conf)
+
+Aplikasi dijalankan oleh FrankenPHP pada port internal `8000` dan dipetakan ke port host **`8071`**. Untuk akses domain publik dengan HTTPS resmi (`https://ujikir.jombangkab.go.id`), lalu lintas harus diteruskan melalui Nginx reverse proxy yang menangani terminasi SSL/TLS, WebSocket upgrade, dan header proxy.
+
+File konfigurasi mandiri disediakan di root repository: [`app-031-uji-kir.conf`](./app-031-uji-kir.conf).
+
+### Isi File Konfigurasi: `app-031-uji-kir.conf`
+
+```nginx
+# Map connection upgrade untuk WebSocket / HTTP 1.1 keep-alive FrankenPHP Octane
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+# Upstream ke container Laravel Octane
+upstream app_031_uji_kir_backend {
+    # Opsi 1: Proxy ke Host Port Docker (default Portainer: 8071:8000)
+    server 127.0.0.1:8071 max_fails=3 fail_timeout=10s;
+
+    # Opsi 2: Jika Nginx berjalan di container Docker pada network 'app-network'
+    # server app-031-uji-kir:8000 max_fails=3 fail_timeout=10s;
+
+    keepalive 32;
+}
+
+# ------------------------------------------------------------------------------
+# 1. HTTP Server Block (Port 80) -> Redirect otomatis ke HTTPS
+# ------------------------------------------------------------------------------
+server {
+    listen 80;
+    listen [::]:80;
+    server_name ujikir.jombangkab.go.id;
+
+    # Challenge path untuk validasi Certbot / Let's Encrypt
+    location /.well-known/acme-challenge/ {
+        root /var/www/html;
+    }
+
+    # Redirect seluruh request HTTP ke HTTPS
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+# ------------------------------------------------------------------------------
+# 2. HTTPS Server Block (Port 443) -> Reverse Proxy ke FrankenPHP Octane
+# ------------------------------------------------------------------------------
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name ujikir.jombangkab.go.id;
+
+    # SSL Certificate
+    ssl_certificate     /etc/ssl/jombangkab.crt;
+    ssl_certificate_key /etc/ssl/jombangkab.key;
+
+    # Konfigurasi Keamanan SSL
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 1d;
+
+    # Security Headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # Batas ukuran upload foto/dokumen pengujian kendaraan
+    client_max_body_size 64M;
+
+    # Log Akses dan Error
+    access_log /var/log/nginx/app-031-uji-kir.access.log;
+    error_log /var/log/nginx/app-031-uji-kir.error.log warn;
+
+    location / {
+        proxy_pass http://app_031_uji_kir_backend;
+
+        # Protokol HTTP 1.1 dan Upgrade headers untuk Octane
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+
+        # Forwarded Headers (Wajib agar Laravel mendeteksi HTTPS dan IP client asli)
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-Port $server_port;
+        proxy_set_header X-Forwarded-Host $host;
+
+        # Pengaturan Timeout dan Buffering
+        proxy_connect_timeout 120s;
+        proxy_send_timeout 120s;
+        proxy_read_timeout 120s;
+        proxy_buffering off;
+    }
+}
+```
+
+### Langkah-langkah Eksekusi di Server Nginx
+
+Jalankan perintah berikut di terminal server reverse proxy (misal `server-prod-9`):
+
+1. **Salin atau buat file konfigurasi di Nginx:**
+   ```sh
+   # Buat file konfigurasi di sites-available
+   sudo cp app-031-uji-kir.conf /etc/nginx/sites-available/app-031-uji-kir.conf
+
+   # Atau buat langsung via nano/vim:
+   sudo nano /etc/nginx/sites-available/app-031-uji-kir.conf
+   ```
+   *(Pada distro berbasis CentOS/RHEL atau container Nginx standalone tanpa `sites-available`, letakkan file langsung di `/etc/nginx/conf.d/app-031-uji-kir.conf`).*
+
+2. **Aktifkan konfigurasi (Symlink ke `sites-enabled`):**
+   ```sh
+   sudo ln -sf /etc/nginx/sites-available/app-031-uji-kir.conf /etc/nginx/sites-enabled/
+   ```
+
+3. **Pastikan File Sertifikat SSL Tersedia:**
+   Pastikan file sertifikat SSL (`jombangkab.crt` dan `jombangkab.key`) sudah berada di direktori `/etc/ssl/` dan memiliki izin baca yang sesuai:
+   ```sh
+   ls -la /etc/ssl/jombangkab.crt /etc/ssl/jombangkab.key
+   ```
+   *(Jika file belum ada di lokasi tersebut, salin file CRT dan KEY sertifikat domain / wildcard Jombang ke `/etc/ssl/`).*
+
+4. **Uji sintaksis Nginx:**
+   ```sh
+   sudo nginx -t
+   ```
+   *Pastikan menghasilkan output:*
+   ```text
+   nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+   nginx: configuration file /etc/nginx/nginx.conf test is successful
+   ```
+
+5. **Muat ulang Nginx:**
+   ```sh
+   sudo systemctl reload nginx
+   ```
+
+6. **Verifikasi Akses Publik dan Aset:**
+   - Uji redirect HTTP ke HTTPS via terminal:
+     ```sh
+     curl -I http://ujikir.jombangkab.go.id
+     # Harus mengembalikan HTTP/1.1 301 Moved Permanently ke https://...
+     ```
+   - Uji respons HTTPS:
+     ```sh
+     curl -I https://ujikir.jombangkab.go.id/up
+     # Harus mengembalikan HTTP/2 200 OK
+     ```
+   - Buka browser di `https://ujikir.jombangkab.go.id`, buka DevTools (`F12`), dan periksa tab **Console** serta **Network**:
+     - Seluruh aset Vite (`/build/assets/*.css` dan `/build/assets/*.js`) termuat aman via HTTPS.
+     - Tidak ada `net::ERR_SSL_PROTOCOL_ERROR` atau mixed content warning.
+
+
+### 6.1 Pengaturan Batas Upload dan Timeout Eksekusi (PHP & Reverse Proxy)
+
+Aplikasi telah dilengkapi konfigurasi custom PHP di `docker/php/custom.ini` dan disalin otomatis saat build Docker:
+- `upload_max_filesize = 64M`
+- `post_max_size = 64M`
+- `max_execution_time = 120` (2 menit)
+- `max_input_time = 120`
+- `memory_limit = 256M`
+
+#### A. Opsi Instan via Portainer (Tanpa Menunggu Rebuild Image)
+Jika ingin langsung menerapkan nilai ini pada container yang sedang berjalan di Portainer:
+1. Buat file `custom.ini` di server host:
+   ```sh
+   sudo mkdir -p /home/kominfo2025/data_app/app-031-uji-kir/config
+   sudo tee /home/kominfo2025/data_app/app-031-uji-kir/config/custom.ini << 'EOF'
+   upload_max_filesize = 64M
+   post_max_size = 64M
+   max_execution_time = 120
+   max_input_time = 120
+   memory_limit = 256M
+   EOF
+   ```
+2. Pada Stack Portainer, tambahkan volume mount pada service `app-031-uji-kir`:
+   ```yaml
+   volumes:
+     - /home/kominfo2025/data_app/app-031-uji-kir/staging/storage_data:/app/storage
+     - /home/kominfo2025/data_app/app-031-uji-kir/config/custom.ini:/usr/local/etc/php/conf.d/custom.ini:ro
+   ```
+3. Klik **Update the stack**.
+
+#### B. Pengaturan di Nginx Proxy Manager (NPM)
+Pastikan Nginx tidak menolak upload besar atau memutus koneksi sebelum PHP selesai:
+1. Buka NPM UI → **Proxy Hosts** → Edit domain `ujikir.jombangkab.go.id`.
+2. Buka tab **Advanced** (Custom Nginx Configuration), tambahkan:
+   ```nginx
+   client_max_body_size 64M;
+   proxy_read_timeout 120s;
+   proxy_connect_timeout 120s;
+   proxy_send_timeout 120s;
+   ```
+3. Klik **Save**.
+
+## 7. Watchtower dan update berikutnya
 
 Label pada stack mengizinkan update, tetapi **tidak memasang Watchtower**. Administrator perlu memastikan Watchtower berjalan di host target, memantau container berlabel, dan memiliki credential sendiri untuk menarik image private GHCR. Credential Portainer tidak otomatis menjadi credential Watchtower.
 
@@ -154,7 +360,7 @@ Jika Watchtower tidak dipakai/bermasalah: buka stack → **Editor → Update the
 
 Penggantian satu container dapat menyebabkan jeda layanan singkat. Jangan mengasumsikan zero downtime. Docker healthcheck hanya menandai unhealthy; tidak otomatis melakukan rollback atau restart container unhealthy.
 
-## 7. Migration manual dan rollback
+## 8. Migration manual dan rollback
 
 Tidak ada migration atau seeder otomatis saat container startup. Untuk database lama Yii, tinjau migration terlebih dahulu, backup database, dan uji di staging. Jangan menjalankan migrate:fresh atau seed demo pada database operasional.
 
@@ -177,7 +383,7 @@ Untuk rollback:
 6. Rollback image tidak memulihkan database. Evaluasi kompatibilitas skema/data sebelum rollback; gunakan backup hanya melalui prosedur pemulihan yang disetujui.
 7. Setelah perbaikan melalui staging dan production disetujui, kembalikan tag `:production`, label Watchtower `"true"`, lalu update stack.
 
-## 8. Validasi di mesin development/CI
+## 9. Validasi di mesin development/CI
 
 ```sh
 # Docker diperlukan. Build test juga membangun aset Vite.
@@ -191,7 +397,7 @@ docker compose -f compose.staging.yaml config --quiet
 
 Jangan jalankan perintah Compose tanpa `--quiet` di log publik ketika environment berisi credential. CI staging dan production juga membangun image production, menjalankan container, dan memeriksa `/up` serta halaman utama sebelum publish. Suite test saat ini bersifat dasar; UAT fungsi KIR dan database tetap wajib.
 
-## 9. Troubleshooting
+## 10. Troubleshooting
 
 | Gejala | Pemeriksaan |
 | --- | --- |
@@ -202,11 +408,14 @@ Jangan jalankan perintah Compose tanpa `--quiet` di log publik ketika environmen
 | Permission denied storage | Volume harus dapat di-chown oleh entrypoint; cek filesystem/NFS host |
 | Image pull unauthorized | Registry Portainer dan credential Watchtower diperiksa masing-masing |
 | Unhealthy / restart berulang | Baca Logs, periksa resource dan versi FrankenPHP; Octane terpasang memerlukan FrankenPHP minimal 1.13 |
+| `Maximum execution time of XX seconds exceeded` | Koneksi database hang atau proses lambat. Naikkan `max_execution_time` di `custom.ini` dan periksa konektivitas jaringan `DB_HOST` |
+| `413 Request Entity Too Large` | Nginx memblokir upload melebihi batas. Naikkan `client_max_body_size 64M;` di Nginx/NPM |
+| `504 Gateway Time-out` | Nginx memutuskan koneksi sebelum backend selesai. Naikkan `proxy_read_timeout 120s;` di Nginx/NPM |
 | Production langsung build tanpa approval | Periksa Required reviewers pada Environment production sebelum rilis berikutnya |
 
 Referensi: [Laravel Octane](https://laravel.com/docs/13.x/octane), [GitHub deployment environments](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments).
 
-## 10. Hasil validasi implementasi lokal
+## 11. Hasil validasi implementasi lokal
 
 - Composer validate: lulus.
 - Build frontend Vite dengan Node 24: lulus.

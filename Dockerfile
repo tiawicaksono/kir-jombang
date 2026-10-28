@@ -13,6 +13,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends supervisor curl unzip \
     && rm -rf /var/lib/apt/lists/*
 RUN install-php-extensions pdo_pgsql pdo_mysql pdo_sqlite redis pcntl intl zip gd bcmath opcache exif sockets mbstring dom xml xmlwriter
+COPY docker/php/custom.ini /usr/local/etc/php/conf.d/custom.ini
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY . .
 RUN mkdir -p storage/app/public storage/framework/cache/data storage/framework/sessions \
