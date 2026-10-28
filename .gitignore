@@ -25,3 +25,10 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Deployment secrets and local database backups
+.env.*
+!.env.example
+/backups/
+/frankenphp
+/public/frankenphp-worker.php
