@@ -13,7 +13,7 @@ if (toggle && menu) {
 // Otomatis ubah input nomor uji dan nomor rangka menjadi huruf kapital
 document
     .querySelectorAll(
-        'input[name="nouji"], input[name="chassis_last5"]'
+        'input[name="nouji"], input[name="nomesin_last5"]'
     )
     .forEach((input) => {
         input.addEventListener('input', () => {

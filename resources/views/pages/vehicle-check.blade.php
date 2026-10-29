@@ -23,8 +23,11 @@
                 </div>
             </div>
 
-            <form action="{{ url('/cek-kendaraan') }}" method="POST"
-                  class="vehicle-search-form">
+            <form
+                action="{{ url('/cek-kendaraan') }}"
+                method="POST"
+                class="vehicle-search-form"
+            >
                 @csrf
 
                 <div class="vehicle-form-grid">
@@ -38,10 +41,14 @@
                             placeholder="Contoh: ABC12345"
                             maxlength="30"
                             autocomplete="off"
+                            spellcheck="false"
                             required
                         >
+
                         @error('nouji')
-                            <small class="vehicle-error">{{ $message }}</small>
+                            <small class="vehicle-error">
+                                {{ $message }}
+                            </small>
                         @enderror
                     </div>
 
@@ -61,8 +68,11 @@
                             autocomplete="off"
                             required
                         >
+
                         @error('chassis_last5')
-                            <small class="vehicle-error">{{ $message }}</small>
+                            <small class="vehicle-error">
+                                {{ $message }}
+                            </small>
                         @enderror
                     </div>
                 </div>
@@ -105,6 +115,7 @@
                         <h2>Informasi Kendaraan</h2>
                         <p>Data kendaraan sesuai identitas yang dicari.</p>
                     </div>
+
                     <span class="vehicle-result-badge">
                         <span></span> Data ditemukan
                     </span>
@@ -115,6 +126,7 @@
                         <span>Nomor Uji</span>
                         <strong>{{ $vehicle['nouji'] }}</strong>
                     </div>
+
                     <div class="vehicle-identity__item">
                         <span>Masa Berlaku Uji</span>
                         <strong>
@@ -150,38 +162,9 @@
                     @endif
                 </section>
 
-                <section class="vehicle-photos-section">
-                    <div class="vehicle-section-heading">
-                        <span class="vehicle-section-heading__number">02</span>
-                        <div>
-                            <h3>Dokumentasi Kendaraan</h3>
-                            <p>Foto kendaraan dari berbagai sisi.</p>
-                        </div>
-                    </div>
-
-                    @if (count($vehicle['photos']))
-                        <div class="vehicle-photo-grid">
-                            @foreach ($vehicle['photos'] as $photo)
-                                <figure class="vehicle-photo">
-                                    <div class="vehicle-photo__image">
-                                        <img
-                                            src="{{ $photo['src'] }}"
-                                            alt="{{ $photo['label'] }} kendaraan"
-                                            loading="lazy"
-                                        >
-                                    </div>
-                                    <figcaption>
-                                        <span></span>{{ $photo['label'] }}
-                                    </figcaption>
-                                </figure>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="vehicle-photos-empty">
-                            Foto kendaraan belum tersedia.
-                        </div>
-                    @endif
-                </section>
+                @include('vehicle.partials.vehicle-history', [
+                    'history' => $vehicle['riwayat'] ?? [],
+                ])
 
                 <p class="vehicle-disclaimer">
                     Informasi ini ditampilkan berdasarkan data yang tersedia
