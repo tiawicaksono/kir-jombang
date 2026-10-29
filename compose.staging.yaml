@@ -1,0 +1,61 @@
+services:
+  app-031-uji-kir:
+    image: ghcr.io/kominfo-jombang/app-031-uji-kir:staging
+    container_name: app-031-uji-kir
+    restart: always
+    mem_limit: 4096m
+    cpus: 2.0
+    stop_grace_period: 130s
+    ports:
+      - "8071:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      APP_NAME: "Uji KIR"
+      APP_ENV: staging
+      APP_KEY: ${APP_KEY:?Isi APP_KEY}
+      APP_DEBUG: "false"
+      APP_URL: ${APP_URL:?Isi APP_URL}
+      ASSET_URL: ${ASSET_URL:-}
+      LOG_CHANNEL: stderr
+      LOG_LEVEL: ${LOG_LEVEL:-warning}
+      DB_CONNECTION: pgsql
+      DB_HOST: ${DB_HOST:?Isi DB_HOST}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_DATABASE: ${DB_DATABASE:?Isi DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME:?Isi DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD:?Isi DB_PASSWORD}
+      DB_SEARCH_PATH: ${DB_SEARCH_PATH:-public}
+      DB_SSLMODE: ${DB_SSLMODE:-prefer}
+      CACHE_STORE: file
+      SESSION_DRIVER: file
+      SESSION_LIFETIME: "120"
+      SESSION_SECURE_COOKIE: ${SESSION_SECURE_COOKIE:-true}
+      QUEUE_CONNECTION: sync
+      MAIL_MAILER: log
+      OCTANE_SERVER: frankenphp
+      OCTANE_HTTPS: ${OCTANE_HTTPS:-true}
+      OCTANE_WORKERS: ${OCTANE_WORKERS:-2}
+      OCTANE_MAX_REQUESTS: ${OCTANE_MAX_REQUESTS:-500}
+      KIR_TABLE: ${KIR_TABLE:-datapengujian}
+      KIR_COL_ID: ${KIR_COL_ID:-idx}
+      KIR_COL_TEST_NUMBER: ${KIR_COL_TEST_NUMBER:-nouji}
+      KIR_COL_CHASSIS: ${KIR_COL_CHASSIS:-nomorrangka}
+      KIR_COL_NAME: ${KIR_COL_NAME:-nama}
+      KIR_COL_TYPE: ${KIR_COL_TYPE:-jenis}
+      KIR_COL_BRAND: ${KIR_COL_BRAND:-merk}
+      KIR_COL_MODEL: ${KIR_COL_MODEL:-tipe}
+      KIR_COL_YEAR: ${KIR_COL_YEAR:-tahunpembuatan}
+      KIR_COL_COLOR: ${KIR_COL_COLOR:-warna}
+      KIR_COL_TEST_DATE: ${KIR_COL_TEST_DATE:-tanggalpengujian}
+      KIR_COL_VALID_UNTIL: ${KIR_COL_VALID_UNTIL:-masaberlaku}
+      KIR_COL_PUBLICATION_STATUS: ${KIR_COL_PUBLICATION_STATUS:-statuspenerbitan}
+    volumes:
+      - /home/kominfo2025/data_app/app-031-uji-kir/staging/storage_data:/app/storage
+    networks:
+      - app-network
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+networks:
+  app-network:
+    external: true
