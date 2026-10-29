@@ -1,0 +1,458 @@
+/* ================================
+   RIWAYAT PENGUJIAN
+================================ */
+
+.vehicle-history-section {
+    margin-top: 36px;
+}
+
+.vehicle-history-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.vehicle-history-eyebrow {
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+.vehicle-history-heading h2 {
+    margin: 6px 0;
+    color: #102a56;
+    font-size: 24px;
+}
+
+.vehicle-history-heading p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.vehicle-history-count {
+    flex-shrink: 0;
+    padding: 8px 13px;
+    border-radius: 24px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.vehicle-history-card {
+    margin-bottom: 18px;
+    padding: 22px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.04);
+}
+
+.vehicle-history-card-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 17px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.vehicle-history-index {
+    display: inline-block;
+    margin-bottom: 6px;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.vehicle-history-card-heading h3 {
+    margin: 0;
+    color: #102a56;
+    font-size: 18px;
+}
+
+.vehicle-history-finish-date {
+    color: #64748b;
+    font-size: 12px;
+    text-align: right;
+}
+
+.vehicle-history-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.vehicle-history-info {
+    min-width: 0;
+}
+
+.vehicle-history-info > span,
+.vehicle-history-notes > span {
+    display: block;
+    margin-bottom: 6px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.vehicle-history-info strong {
+    display: block;
+    color: #172b4d;
+    font-size: 13px;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+}
+
+.vehicle-history-results {
+    padding: 18px 0;
+    border-top: 1px solid #edf2f7;
+}
+
+.vehicle-history-results h4 {
+    margin: 0 0 13px;
+    color: #102a56;
+    font-size: 14px;
+}
+
+.vehicle-history-result-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.vehicle-history-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid #edf2f7;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.vehicle-history-result > span {
+    color: #475569;
+    font-size: 12px;
+}
+
+.vehicle-status {
+    font-size: 10px;
+    font-weight: 800;
+    text-align: right;
+}
+
+.vehicle-status-passed {
+    color: #15803d;
+}
+
+.vehicle-status-failed {
+    color: #dc2626;
+}
+
+.vehicle-status-unknown {
+    color: #64748b;
+}
+
+.vehicle-history-no-result,
+.vehicle-history-no-photo {
+    margin-top: 12px;
+    padding: 13px;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.vehicle-history-notes {
+    padding: 15px 0;
+    border-top: 1px solid #edf2f7;
+}
+
+.vehicle-history-notes p {
+    margin: 0;
+    color: #475569;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+/* ================================
+   TOMBOL BUKA FOTO PER RIWAYAT
+================================ */
+
+.vehicle-history-photo-details {
+    margin-top: 12px;
+    border: 1px solid #dbeafe;
+    border-radius: 13px;
+    background: #f8fbff;
+    overflow: hidden;
+}
+
+.vehicle-history-photo-details > summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+
+.vehicle-history-photo-details > summary::-webkit-details-marker {
+    display: none;
+}
+
+.vehicle-history-photo-details > summary:hover {
+    background: #eff6ff;
+}
+
+.vehicle-history-photo-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 22px;
+}
+
+.vehicle-history-photo-summary {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.vehicle-history-photo-summary strong {
+    color: #1e40af;
+    font-size: 13px;
+}
+
+.vehicle-history-photo-summary small {
+    color: #64748b;
+    font-size: 11px;
+}
+
+.vehicle-history-photo-arrow {
+    color: #2563eb;
+    font-size: 20px;
+    transition: transform 0.2s ease;
+}
+
+.vehicle-history-photo-details[open] .vehicle-history-photo-arrow {
+    transform: rotate(180deg);
+}
+
+.vehicle-history-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    padding: 0 15px 15px;
+}
+
+.vehicle-history-photo-button {
+    display: block;
+    min-width: 0;
+    padding: 0 0 11px;
+    border: 1px solid #e2e8f0;
+    border-radius: 11px;
+    background: #fff;
+    color: #172b4d;
+    text-align: left;
+    cursor: pointer;
+    overflow: hidden;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.vehicle-history-photo-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(15, 23, 42, 0.1);
+}
+
+.vehicle-history-photo-frame {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    background: #e2e8f0;
+    overflow: hidden;
+}
+
+.vehicle-history-photo-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vehicle-history-photo-button > span,
+.vehicle-history-photo-button > small {
+    display: block;
+    margin-right: 9px;
+    margin-left: 9px;
+}
+
+.vehicle-history-photo-button > span {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.vehicle-history-photo-button > small {
+    margin-top: 5px;
+    color: #64748b;
+    font-size: 10px;
+}
+
+/* ================================
+   MODAL FOTO
+================================ */
+
+.vehicle-history-photo-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+}
+
+.vehicle-history-photo-modal.is-open {
+    display: flex;
+}
+
+.vehicle-history-photo-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.88);
+    cursor: pointer;
+}
+
+.vehicle-history-photo-modal-content {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 1000px);
+    max-height: 92vh;
+    padding: 20px;
+    border-radius: 16px;
+    background: #fff;
+    overflow: auto;
+}
+
+.vehicle-history-photo-modal-content h3 {
+    margin: 0 45px 16px 0;
+    color: #102a56;
+    font-size: 15px;
+}
+
+.vehicle-history-photo-modal-content > img {
+    display: block;
+    max-width: 100%;
+    max-height: 76vh;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+.vehicle-history-photo-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.vehicle-history-photo-close:hover {
+    background: #dbeafe;
+}
+
+.vehicle-history-modal-open {
+    overflow: hidden;
+}
+
+/* ================================
+   RIWAYAT KOSONG
+================================ */
+
+.vehicle-history-empty {
+    padding: 38px 20px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.vehicle-history-empty h3 {
+    margin: 0 0 8px;
+    color: #102a56;
+    font-size: 17px;
+}
+
+.vehicle-history-empty p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 640px) {
+    .vehicle-history-heading {
+        align-items: flex-start;
+    }
+
+    .vehicle-history-heading h2 {
+        font-size: 21px;
+    }
+
+    .vehicle-history-card {
+        padding: 15px;
+    }
+
+    .vehicle-history-card-heading {
+        flex-direction: column;
+    }
+
+    .vehicle-history-finish-date {
+        text-align: left;
+    }
+
+    .vehicle-history-info-grid,
+    .vehicle-history-result-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .vehicle-history-photo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .vehicle-history-photo-modal {
+        padding: 12px;
+    }
+
+    .vehicle-history-photo-modal-content {
+        padding: 15px;
+    }
+}

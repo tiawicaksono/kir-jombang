@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/contact.css') }}">
+@endpush
 @section('title', 'Beranda')
 @section('meta_description', 'Informasi layanan Pengujian Kendaraan Bermotor, persyaratan, alur pelayanan, dan pengecekan data kendaraan.')
 @section('content')
@@ -61,11 +64,10 @@
         <div class="info-grid">
             <a class="info-card" href="{{ route('vehicles.form') }}"><span class="info-icon">⌕</span><span class="info-card-arrow">↗</span><h3>Cek Data Kendaraan</h3><p>Telusuri informasi kendaraan menggunakan data verifikasi yang diminta.</p><span class="info-card-link">Mulai cek <b>→</b></span></a>
             <a class="info-card" href="{{ route('requirements') }}"><span class="info-icon">▤</span><span class="info-card-arrow">↗</span><h3>Persyaratan Pengujian</h3><p>Pastikan dokumen kendaraan dan persyaratan administrasi telah disiapkan.</p><span class="info-card-link">Informasi persyaratan <b>→</b></span></a>
-            <article class="info-card"><span class="info-icon">◷</span><span class="info-card-arrow">↗</span><h3>Jadwal Pelayanan</h3><p>Dapatkan informasi jam pelayanan langsung dari kantor pengujian setempat.</p><span class="info-card-link">Lihat informasi <b>→</b></span></article>
-            <article class="info-card"><span class="info-icon">▧</span><span class="info-card-arrow">↗</span><h3>Berita & Pengumuman</h3><p>Ikuti pengumuman dan pembaruan layanan dari instansi terkait.</p><span class="info-card-link">Info layanan <b>→</b></span></article>
+            <a class="info-card" href="{{ route('service.schedule') }}"><span class="info-icon">◷</span><span class="info-card-arrow">↗</span><h3>Jadwal Pelayanan</h3><p>Dapatkan informasi jam pelayanan langsung dari kantor pengujian setempat.</p><span class="info-card-link">Lihat informasi <b>→</b></span></a>
+            <a class="info-card" href="{{ route('berita.index') }}"><span class="info-icon">▧</span><span class="info-card-arrow">↗</span><h3>Berita & Pengumuman</h3><p>Ikuti pengumuman dan pembaruan layanan dari instansi terkait.</p><span class="info-card-link">Info layanan <b>→</b></span></a>
         </div>
     </div>
 </section>
-
-<section class="contact-band"><div class="container contact-band-inner"><div><span class="eyebrow eyebrow-light">BUTUH INFORMASI LEBIH LANJUT?</span><h2>Pelayanan yang baik dimulai dari informasi yang jelas.</h2></div><a class="button button-white" href="#kontak">Informasi Kontak <span>→</span></a></div></section>
+@include('pages.partials.contact')
 @endsection

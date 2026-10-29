@@ -1,5 +1,8 @@
 @extends('layouts.app')
-
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/data-kendaraan.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/riwayat-kendaraan.css') }}">
+@endpush
 @section('content')
 <section class="vehicle-page">
     <div class="vehicle-page__hero">
@@ -162,7 +165,7 @@
                     @endif
                 </section>
 
-                @include('vehicle.partials.vehicle-history', [
+                @include('pages.partials.vehicle-history', [
                     'history' => $vehicle['riwayat'] ?? [],
                 ])
 
