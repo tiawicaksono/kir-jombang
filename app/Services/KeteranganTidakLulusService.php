@@ -2,14 +2,43 @@
 
 namespace App\Services;
 
+use App\Models\HasilUji;
 use App\Models\ListKelulusan;
 
 class KeteranganTidakLulusService
 {
+    /**
+     * Mengambil keterangan tidak lulus berdasarkan:
+     * ID hasil uji, nomor uji, dan kategori.
+     */
     public function getByHasilUji(
         int $idHasilUji,
+        string $noUji,
         string $kategori
     ): array {
+        $normalizedNoUji = mb_strtoupper(
+            preg_replace('/\s+/', '', trim($noUji)) ?? ''
+        );
+
+        // Pastikan ID hasil uji benar-benar milik nomor uji tersebut.
+        $hasilUjiValid = HasilUji::query()
+            ->where('id_hasil_uji', $idHasilUji)
+            ->whereHas('kendaraan', function ($query) use ($normalizedNoUji) {
+                $query->whereRaw(
+                    "REPLACE(UPPER(COALESCE(no_uji, '')), ' ', '') = ?",
+                    [$normalizedNoUji]
+                );
+            })
+            ->exists();
+
+        if (!$hasilUjiValid) {
+            return [
+                'status' => 'error',
+                'status_message' => 'Data hasil uji tidak ditemukan.',
+                'data' => [],
+            ];
+        }
+
         $query = ListKelulusan::query()
             ->select([
                 'id_hasil_uji',
@@ -18,7 +47,7 @@ class KeteranganTidakLulusService
             ])
             ->where('id_hasil_uji', $idHasilUji);
 
-        if (strtolower(trim($kategori)) !== 'all') {
+        if (mb_strtolower(trim($kategori)) !== 'all') {
             $query->where('input_tl', trim($kategori));
         }
 

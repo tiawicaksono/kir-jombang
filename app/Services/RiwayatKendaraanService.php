@@ -14,28 +14,28 @@ class RiwayatKendaraanService
     }
 
     /**
-     * Riwayat uji berdasarkan Nomor Uji dan 5 digit terakhir
-     * Nomor Mesin.
+     * Riwayat uji berdasarkan Nomor Uji dan
+     * 5 digit terakhir Nomor Rangka/Chasis.
      */
     public function getByNomor(
         string $nomor,
-        string $nomorMesin
+        string $noChasis
     ): array {
         $input = $this->nomorKendaraanService->normalizeInput(
             $nomor,
-            $nomorMesin
+            $noChasis
         );
 
         if (!$input['valid']) {
             return [
                 'status' => false,
-                'message' => 'Nomor Uji dan 5 digit terakhir Nomor Mesin wajib diisi dengan benar.',
+                'message' => 'Nomor Uji dan 5 digit terakhir Nomor Rangka wajib diisi dengan benar.',
                 'data' => null,
             ];
         }
 
         $normalizedNoUji = $input['no_uji'];
-        $normalizedNoMesin = $input['no_mesin'];
+        $normalizedNoChasis = $input['no_chasis'];
 
         $riwayat = HasilUji::query()
             ->with([
@@ -44,7 +44,7 @@ class RiwayatKendaraanService
                         'id_kendaraan',
                         'no_uji',
                         'no_kendaraan',
-                        'no_mesin',
+                        'no_chasis',
                     ]);
                 },
                 'daftar:id_daftar,tgl_uji',
@@ -52,7 +52,7 @@ class RiwayatKendaraanService
             ])
             ->whereHas('kendaraan', function (Builder $query) use (
                 $normalizedNoUji,
-                $normalizedNoMesin
+                $normalizedNoChasis
             ) {
                 $query
                     ->whereRaw(
@@ -60,8 +60,8 @@ class RiwayatKendaraanService
                         [$normalizedNoUji]
                     )
                     ->whereRaw(
-                        "RIGHT(REPLACE(LOWER(COALESCE(no_mesin, '')), ' ', ''), 5) = ?",
-                        [$normalizedNoMesin]
+                        "RIGHT(REPLACE(LOWER(COALESCE(no_chasis, '')), ' ', ''), 5) = ?",
+                        [$normalizedNoChasis]
                     );
             })
             ->get()

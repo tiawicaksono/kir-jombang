@@ -16,20 +16,21 @@ class NomorKendaraanService
     }
 
     /**
-     * Normalisasi dan validasi pasangan nomor kendaraan.
+     * Normalisasi dan validasi pasangan nomor kendaraan
+     * dan 5 digit terakhir nomor rangka/chasis.
      */
     public function normalizeInput(
         string $noUji,
-        string $noMesin
+        string $noChasis
     ): array {
         $normalizedNoUji = $this->normalize($noUji);
-        $normalizedNoMesin = $this->normalize($noMesin);
+        $normalizedNoChasis = $this->normalize($noChasis);
 
         return [
             'no_uji' => $normalizedNoUji,
-            'no_mesin' => $normalizedNoMesin,
+            'no_chasis' => $normalizedNoChasis,
             'valid' => $normalizedNoUji !== ''
-                && preg_match('/^\d{5}$/', $normalizedNoMesin) === 1,
+                && preg_match('/^\d{5}$/', $normalizedNoChasis) === 1,
         ];
     }
 }

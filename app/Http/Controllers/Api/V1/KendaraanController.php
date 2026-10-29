@@ -31,12 +31,12 @@ class KendaraanController extends Controller
         try {
             $validated = $request->validate([
                 'nouji' => ['required', 'string', 'max:100'],
-                'nomesin' => ['required', 'string', 'regex:/^\d{5}$/'],
+                'norangka' => ['required', 'string', 'regex:/^\d{5}$/'],
             ]);
         } catch (ValidationException $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Nomor Uji dan 5 digit terakhir Nomor Mesin wajib diisi. Nomor Mesin harus tepat 5 digit angka.',
+                'message' => 'Nomor Uji dan 5 digit terakhir Nomor Rangka wajib diisi. Nomor Rangka harus tepat 5 digit angka.',
                 'errors' => $e->errors(),
                 'data' => null,
             ], 422);
@@ -45,7 +45,7 @@ class KendaraanController extends Controller
         return response()->json(
             $this->kendaraanService->detail(
                 $validated['nouji'],
-                $validated['nomesin']
+                $validated['norangka']
             )
         );
     }
@@ -73,12 +73,14 @@ class KendaraanController extends Controller
     {
         $validated = $request->validate([
             'idhasiluji' => ['required', 'integer', 'min:1'],
+            'nouji' => ['required', 'string', 'max:100'],
             'kategori' => ['required', 'string', 'max:100'],
         ]);
 
         $result = $this->keteranganTidakLulusService->getByHasilUji(
             (int) $validated['idhasiluji'],
-            $validated['kategori']
+            trim($validated['nouji']),
+            trim($validated['kategori'])
         );
 
         return response()->json($result);
@@ -91,12 +93,12 @@ class KendaraanController extends Controller
     {
         $validated = $request->validate([
             'nouji' => ['required', 'string', 'max:100'],
-            'nomesin' => ['required', 'string', 'regex:/^\d{5}$/'],
+            'norangka' => ['required', 'string', 'regex:/^\d{5}$/'],
         ]);
 
         $result = $this->riwayatKendaraanService->getByNomor(
             strtoupper(trim($validated['nouji'])),
-            $validated['nomesin']
+            $validated['norangka']
         );
 
         return response()->json($result);

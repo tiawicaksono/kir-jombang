@@ -15,25 +15,25 @@ class KendaraanService
 
     /**
      * Detail kendaraan berdasarkan Nomor Uji atau Nomor Kendaraan,
-     * serta 5 digit terakhir Nomor Mesin.
+     * serta 5 digit terakhir Nomor Rangka/Chasis.
      */
-    public function detail(string $noUji, string $noMesin): array
+    public function detail(string $noUji, string $noChasis): array
     {
         $input = $this->nomorKendaraanService->normalizeInput(
             $noUji,
-            $noMesin
+            $noChasis
         );
 
         if (!$input['valid']) {
             return [
                 'status' => false,
-                'message' => 'Nomor Uji dan 5 digit terakhir Nomor Mesin wajib diisi dengan benar.',
+                'message' => 'Nomor Uji dan 5 digit terakhir Nomor Rangka wajib diisi dengan benar.',
                 'data' => null,
             ];
         }
 
         $normalizedNoUji = $input['no_uji'];
-        $normalizedNoMesin = $input['no_mesin'];
+        $normalizedNoChasis = $input['no_chasis'];
 
         $kendaraan = Kendaraan::query()
             ->with([
@@ -53,8 +53,8 @@ class KendaraanService
                     );
             })
             ->whereRaw(
-                "RIGHT(REPLACE(LOWER(COALESCE(no_mesin, '')), ' ', ''), 5) = ?",
-                [$normalizedNoMesin]
+                "RIGHT(REPLACE(LOWER(COALESCE(no_chasis, '')), ' ', ''), 5) = ?",
+                [$normalizedNoChasis]
             )
             ->first();
 
