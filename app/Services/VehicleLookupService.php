@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\HasilUji;
 use App\Models\Kendaraan;
-use App\Models\Riwayat;
+use Illuminate\Support\Facades\DB;
 use RuntimeException;
 use Throwable;
 
@@ -300,61 +299,111 @@ class VehicleLookupService
 
     private function getRiwayat(int $idKendaraan): array
     {
-        $riwayat = Riwayat::query()
-            ->where('id_kendaraan', $idKendaraan)
-            ->orderByDesc('tgl_uji')
-            ->orderByDesc('id_riwayat')
-            ->get([
-                'id_riwayat',
-                'tgl_uji',
-                'tempat',
-                'catatan',
-                'nama_penguji',
-                'id_hasil_uji',
-                'tempat_tujuan',
-            ]);
+        $jenisUjiDenganHasil = [1, 2, 4, 8];
+
+        $riwayat = DB::table('tbl_retribusi as r')
+            ->join(
+                'tbl_kendaraan as k',
+                'k.id_kendaraan',
+                '=',
+                'r.id_kendaraan'
+            )
+            ->leftJoin(
+                'tbl_uji as u',
+                'u.id_uji',
+                '=',
+                'r.id_uji'
+            )
+            ->leftJoin('tbl_daftar as d', function ($join) use ($jenisUjiDenganHasil) {
+                $join->on(
+                    'd.id_retribusi',
+                    '=',
+                    'r.id_retribusi'
+                )->whereIn('r.id_uji', $jenisUjiDenganHasil);
+            })
+            ->leftJoin('tbl_hasil_uji as h', function ($join) {
+                $join->on(
+                    'h.id_daftar',
+                    '=',
+                    'd.id_daftar'
+                );
+            })
+            ->where('r.id_kendaraan', $idKendaraan)
+            ->select([
+                'r.id_retribusi',
+                'r.id_uji',
+                'r.tgl_retribusi',
+                'r.tgl_uji',
+                'r.tglmati',
+
+                'u.nm_uji',
+
+                'd.id_daftar',
+                'd.tgl_uji as tanggal_daftar',
+
+                'h.id_hasil_uji',
+                'h.jdatang',
+                'h.jselesai',
+                'h.lulus_prauji',
+                'h.lulus_smoke',
+                'h.lulus_pitlift',
+                'h.lulus_lampu',
+                'h.lulus_break',
+                'h.uji_ulang',
+                'h.nm_penguji',
+
+                'h.img_depan',
+                'h.img_belakang',
+                'h.img_kanan',
+                'h.img_kiri',
+            ])
+            ->selectRaw("
+            COALESCE(
+                d.tgl_uji,
+                r.tgl_uji,
+                r.tgl_retribusi
+            ) AS tanggal_uji
+        ")
+            ->orderByRaw("
+            COALESCE(
+                d.tgl_uji,
+                r.tgl_uji,
+                r.tgl_retribusi
+            ) DESC
+        ")
+            ->orderByDesc('r.id_retribusi')
+            ->get();
 
         if ($riwayat->isEmpty()) {
             return [];
         }
 
-        $hasilUjiIds = $riwayat
-            ->pluck('id_hasil_uji')
-            ->filter()
-            ->unique()
-            ->values();
-
-        // Ambil foto dan hasil pemeriksaan dari hasil uji yang
-        // benar-benar terhubung dengan setiap baris riwayat.
-        $hasilUjiMap = HasilUji::query()
-            ->whereIn('id_hasil_uji', $hasilUjiIds)
-            ->get([
-                'id_hasil_uji',
-                'jdatang',
-                'jselesai',
-                'lulus_prauji',
-                'lulus_smoke',
-                'lulus_pitlift',
-                'lulus_lampu',
-                'lulus_break',
-                'uji_ulang',
-                'img_depan',
-                'img_belakang',
-                'img_kanan',
-                'img_kiri',
-            ])
-            ->keyBy('id_hasil_uji');
-
-        return $riwayat->map(function ($item) use ($hasilUjiMap) {
-            $hasil = $hasilUjiMap->get($item->id_hasil_uji);
+        return $riwayat->map(function ($item) {
+            // Baris hasil pemeriksaan hanya tersedia untuk jenis
+            // pengujian yang memiliki proses pendaftaran dan hasil uji.
+            $hasil = $item->id_hasil_uji ? $item : null;
 
             return [
-                'id_riwayat' => $item->id_riwayat,
-                'tanggal_uji' => $item->tgl_uji,
-                'tempat' => $item->tempat,
-                'tempat_tujuan' => $item->tempat_tujuan,
-                'nama_penguji' => $item->nama_penguji,
-                'catatan' => $item->catatan,
+                // id_retribusi menjadi identitas riwayat yang baru.
+                'id_retribusi' => $item->id_retribusi,
+
+                // Dipertahankan sementara agar frontend lama tidak rusak.
+                'id_riwayat' => $item->id_retribusi,
+
+                'id_uji' => $item->id_uji,
+                'nama_uji' => $item->nm_uji,
+
+                'tanggal_uji' => $item->tanggal_uji,
+                'masa_berlaku' => $item->tglmati,
+
+                // Data ini dahulu berasal dari tbl_riwayat.
+                // Belum ada sumber penggantinya pada struktur yang kita gunakan.
+                'tempat' => null,
+                'tempat_tujuan' => null,
+                'catatan' => null,
+
+                'nama_penguji' => $item->nm_penguji,
+
                 'hasil_uji' => $this->formatHasilUji($hasil),
                 'foto_kendaraan' => $this->formatPhotos($hasil),
             ];

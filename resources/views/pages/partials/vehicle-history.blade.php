@@ -24,6 +24,10 @@
                         Riwayat #{{ $index + 1 }}
                     </span>
 
+                    <span class="vehicle-history-type">
+                        {{ $item['nama_uji'] ?? 'Jenis pengujian tidak tersedia' }}
+                    </span>
+
                     <h3>
                         @if (!empty($item['tanggal_uji']))
                             {{ \Carbon\Carbon::parse($item['tanggal_uji'])->format('d M Y') }}
@@ -53,23 +57,9 @@
                 </div>
 
                 <div class="vehicle-history-info">
-                    <span>Nama Penguji</span>
-                    <strong>{{ $item['nama_penguji'] ?: '-' }}</strong>
-                </div>
-
-                <div class="vehicle-history-info">
                     <span>Pengujian Datang</span>
                     <strong>
                         {{ $hasilUji['tanggal_datang'] ?? '-' }}
-                    </strong>
-                </div>
-
-                <div class="vehicle-history-info">
-                    <span>Pengujian Ulang</span>
-                    <strong>
-                        {{ isset($hasilUji['uji_ulang'])
-                            ? ($hasilUji['uji_ulang'] ? 'Ya' : 'Tidak')
-                            : '-' }}
                     </strong>
                 </div>
             </div>
