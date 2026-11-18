@@ -35,7 +35,7 @@
 
                 <div class="vehicle-form-grid">
                     <div class="vehicle-form-field">
-                        <label for="nouji">Nomor Uji</label>
+                        <label for="nouji">Nomor Uji / Nomor Kendaraan</label>
                         <input
                             id="nouji"
                             type="text"
