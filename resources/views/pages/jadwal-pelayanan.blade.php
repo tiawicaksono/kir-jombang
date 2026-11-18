@@ -72,9 +72,9 @@
             <div>
                 <strong>Informasi Jam Pelayanan</strong>
                 <p>
-                    Pelayanan Pengujian Kendaraan Bermotor berlangsung pada
-                    hari Senin sampai Kamis pukul 08.00–11.00 WIB dan Jumat
-                    pukul 08.00–10.00 WIB. Sabtu, Minggu, dan hari libur
+                    Jam buka loket pendaftaran Pengujian Kendaraan Bermotor berlangsung pada
+                    hari Senin sampai Kamis pukul 08.00 - 11.00 WIB dan Jumat
+                    pukul 08.00 - 10.00 WIB. Sabtu, Minggu, dan hari libur
                     nasional atau tanggal merah tidak ada pelayanan.
                 </p>
             </div>
@@ -83,10 +83,10 @@
         <div class="schedule-grid">
             <article class="schedule-card">
                 <div class="schedule-card-icon">◷</div>
-                <span class="schedule-card-label">SENIN – KAMIS</span>
-                <h3>08.00 – 11.00 WIB</h3>
+                <span class="schedule-card-label">SENIN - KAMIS</span>
+                <h3>08.00 - 11.00 WIB</h3>
                 <p>
-                    Pelayanan pengujian kendaraan bermotor pada hari
+                    Jam buka loket pendaftaran Pengujian Kendaraan Bermotor pada hari
                     Senin, Selasa, Rabu, dan Kamis.
                 </p>
                 <div class="schedule-card-footer">
@@ -98,7 +98,7 @@
             <article class="schedule-card">
                 <div class="schedule-card-icon">◴</div>
                 <span class="schedule-card-label">HARI JUMAT</span>
-                <h3>08.00 – 10.00 WIB</h3>
+                <h3>08.00 - 10.00 WIB</h3>
                 <p>
                     Pelayanan pengujian kendaraan bermotor pada hari Jumat
                     dengan jam pelayanan lebih singkat.
@@ -145,8 +145,8 @@
                 <div>
                     <h3>Sesuaikan waktu kedatangan</h3>
                     <p>
-                        Datang pada Senin–Kamis pukul 08.00–11.00 WIB
-                        atau Jumat pukul 08.00–10.00 WIB. Hindari
+                        Datang pada Senin - Kamis pukul 08.00 - 11.00 WIB
+                        atau Jumat pukul 08.00 - 10.00 WIB. Hindari
                         hari Sabtu, Minggu, dan hari libur nasional.
                     </p>
                 </div>

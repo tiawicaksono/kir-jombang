@@ -63,25 +63,36 @@ class VehicleLookupService
                     'sertifikasi',
                     'jenisKendaraan',
                 ])
-                ->whereRaw(
-                    "regexp_replace(
-                        upper(coalesce(no_uji, '')),
-                        '[[:space:]]',
-                        '',
-                        'g'
-                    ) = ?",
-                    [$testNumber]
-                )
+                ->where(function ($query) use ($testNumber) {
+                    $query->whereRaw(
+                        "regexp_replace(
+                upper(coalesce(no_uji, '')),
+                '[[:space:]]',
+                '',
+                'g'
+            ) = ?",
+                        [$testNumber]
+                    )
+                        ->orWhereRaw(
+                            "regexp_replace(
+                upper(coalesce(no_kendaraan, '')),
+                '[[:space:]]',
+                '',
+                'g'
+            ) = ?",
+                            [$testNumber]
+                        );
+                })
                 ->whereRaw(
                     "right(
-                        regexp_replace(
-                            upper(coalesce(no_chasis, '')),
-                            '[[:space:]]',
-                            '',
-                            'g'
-                        ),
-                        5
-                    ) = ?",
+            regexp_replace(
+                upper(coalesce(no_chasis, '')),
+                '[[:space:]]',
+                '',
+                'g'
+            ),
+            5
+        ) = ?",
                     [$lastFive]
                 )
                 ->first();

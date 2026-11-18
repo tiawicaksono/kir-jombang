@@ -24,7 +24,7 @@
                 <span class="contact-label">LOKASI PELAYANAN</span>
                 <h3>Uji KIR PKB Jombang</h3>
                 <p>
-                    Desa Janti, Kecamatan Jogoroto,
+                    Jl. Raya Janti, Desa Janti, Kecamatan Jogoroto,
                     Kabupaten Jombang, Jawa Timur 61485.
                 </p>
 
@@ -95,7 +95,7 @@
                 <span class="contact-label">TEMUKAN LOKASI KAMI</span>
                 <h3>Uji KIR PKB Jombang</h3>
                 <p>
-                    Desa Janti, Kecamatan Jogoroto,
+                    Jl. Raya Janti, Desa Janti, Kecamatan Jogoroto,
                     Kabupaten Jombang, Jawa Timur 61485.
                 </p>
 

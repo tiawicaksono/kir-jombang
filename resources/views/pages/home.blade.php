@@ -32,14 +32,74 @@
     <article class="feature-item"><span class="feature-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg></span><div><h3>Pelayanan Transparan</h3><p>Informasi layanan yang jelas dan terarah.</p></div></article>
 </section>
 
-<section class="section process-section" id="layanan">
-    <div class="container">
-        <div class="section-heading"><div><span class="eyebrow">LAYANAN KAMI</span><h2>Lebih Mudah Memahami<br><span>Proses Pengujian KIR.</span></h2></div><p>Kenali tahapan umum pengujian kendaraan bermotor. Persyaratan dan alur rinci mengikuti ketentuan kantor pengujian setempat.</p></div>
-        <div class="process-grid">
-            <article class="process-card"><span class="process-number">01</span><div class="process-icon">▤</div><h3>Persiapan Dokumen</h3><p>Siapkan dokumen kendaraan sesuai persyaratan layanan yang berlaku.</p><span class="process-line"></span></article>
-            <article class="process-card"><span class="process-number">02</span><div class="process-icon">⌕</div><h3>Pemeriksaan Kendaraan</h3><p>Kendaraan menjalani pemeriksaan teknis sesuai prosedur pengujian.</p><span class="process-line"></span></article>
-            <article class="process-card"><span class="process-number">03</span><div class="process-icon">✓</div><h3>Evaluasi Hasil Uji</h3><p>Hasil pemeriksaan dievaluasi oleh petugas penguji berwenang.</p><span class="process-line"></span></article>
-            <article class="process-card"><span class="process-number">04</span><div class="process-icon">▣</div><h3>Informasi Hasil</h3><p>Ikuti informasi hasil dan masa berlaku sesuai data yang tercatat.</p><span class="process-line"></span></article>
+<section class="section about-section" id="tentang">
+    <div class="container about-grid">
+        <div class="about-visual">
+            <div class="about-photo"></div>
+
+            <div class="about-badge">
+                <span>✦</span>
+                <div>
+                    <strong>Keselamatan</strong>
+                    <small>Menjadi prioritas bersama</small>
+                </div>
+            </div>
+
+            <div class="about-decoration"></div>
+        </div>
+
+        <div class="about-copy">
+            <span class="eyebrow">PROFIL DINAS PERHUBUNGAN</span>
+
+            <h2>
+                Melayani Transportasi yang
+                <span>Aman dan Berkeselamatan.</span>
+            </h2>
+
+            <p>
+                Dinas Perhubungan merupakan unsur pelaksana urusan
+                pemerintahan yang menjadi kewenangan Daerah, dipimpin
+                oleh Kepala Dinas yang berkedudukan di bawah dan
+                bertanggung jawab kepada Bupati melalui Sekretaris Daerah.
+            </p>
+
+            <p>
+                Dinas Perhubungan mempunyai tugas membantu Bupati
+                melaksanakan fungsi pelaksana urusan pemerintahan
+                yang menjadi kewenangan daerah di bidang perhubungan.
+            </p>
+
+            <div class="about-vision">
+                <h3>Visi</h3>
+                <p>
+                    Terwujudnya pelayanan pengujian kendaraan bermotor
+                    yang profesional, efektif, efisien, akuntabel,
+                    dan berkeselamatan.
+                </p>
+            </div>
+
+            <div class="about-mission">
+                <h3>Misi</h3>
+                <ol>
+                    <li>
+                        <span class="mission-number">1.</span>
+                        <span>Menyelenggarakan pengujian kendaraan bermotor yang berkualitas, profesional, efektif, efisien, akuntabel, dan berkeselamatan.</span>
+                    </li>
+                    <li>
+                        <span class="mission-number">2.</span>
+                        <span>Meningkatkan mutu pelayanan pengujian kendaraan bermotor.</span>
+                    </li>
+                    <li>
+                        <span class="mission-number">3.</span>
+                        <span>Meningkatkan profesionalisme tenaga penguji kendaraan bermotor.</span>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="about-motto">
+                <span>MOTTO PELAYANAN</span>
+                <strong>"Pengabdian Kami untuk Keselamatan"</strong>
+            </div>
         </div>
     </div>
 </section>
@@ -51,10 +111,15 @@
     </div>
 </section>
 
-<section class="section about-section" id="tentang">
-    <div class="container about-grid">
-        <div class="about-visual"><div class="about-photo"></div><div class="about-badge"><span>✦</span><div><strong>Keselamatan</strong><small>Menjadi prioritas bersama</small></div></div><div class="about-decoration"></div></div>
-        <div class="about-copy"><span class="eyebrow">TENTANG PENGUJIAN KIR</span><h2>Membangun Transportasi yang <span>Aman dan Andal.</span></h2><p>Pengujian Kendaraan Bermotor merupakan bagian penting dalam mendukung keselamatan lalu lintas. Melalui pemeriksaan sesuai ketentuan, kondisi teknis kendaraan dapat dievaluasi agar memenuhi persyaratan laik jalan.</p><p>Website ini disiapkan sebagai pusat informasi layanan, persyaratan, dan pengecekan data kendaraan yang tersedia secara daring.</p><a class="text-link" href="#informasi">Lihat informasi layanan <span>→</span></a></div>
+<section class="section process-section" id="layanan">
+    <div class="container">
+        <div class="section-heading"><div><span class="eyebrow">ALUR PELAYANAN</span><h2>Lebih Mudah Memahami<br><span>Proses Pengujian KIR.</span></h2></div><p>Kenali tahapan umum pengujian kendaraan bermotor. Persyaratan dan alur rinci mengikuti ketentuan kantor pengujian setempat.</p></div>
+        <div class="process-grid">
+            <article class="process-card"><span class="process-number">01</span><div class="process-icon">▤</div><h3>Persiapan Dokumen</h3><p>Siapkan dokumen kendaraan sesuai persyaratan layanan yang berlaku.</p><span class="process-line"></span></article>
+            <article class="process-card"><span class="process-number">02</span><div class="process-icon">⌕</div><h3>Pemeriksaan Kendaraan</h3><p>Kendaraan menjalani pemeriksaan teknis sesuai prosedur pengujian.</p><span class="process-line"></span></article>
+            <article class="process-card"><span class="process-number">03</span><div class="process-icon">✓</div><h3>Evaluasi Hasil Uji</h3><p>Hasil pemeriksaan dievaluasi oleh petugas penguji berwenang.</p><span class="process-line"></span></article>
+            <article class="process-card"><span class="process-number">04</span><div class="process-icon">▣</div><h3>Informasi Hasil</h3><p>Ikuti informasi hasil dan masa berlaku sesuai data yang tercatat.</p><span class="process-line"></span></article>
+        </div>
     </div>
 </section>
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\VehicleCheckController;
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\RequirementsController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -10,7 +11,8 @@ Route::view('/', 'pages.home')->name('home');
 Route::get('/cek-kendaraan', [VehicleCheckController::class, 'showForm'])->name('vehicles.form');
 Route::post('/cek-kendaraan', [VehicleCheckController::class, 'search'])->middleware('throttle:10,1')->name('vehicles.search');
 // PERSYARATAN
-Route::view('/persyaratan-pengujian', 'pages.persyaratan')->name('requirements');
+Route::get('/persyaratan-pengujian', [RequirementsController::class, 'index'])
+    ->name('requirements');
 // JADWAL PELAYANAN
 Route::view('/jadwal-pelayanan', 'pages.jadwal-pelayanan')->name('service.schedule');
 // BERITA

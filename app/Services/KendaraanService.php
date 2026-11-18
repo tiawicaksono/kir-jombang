@@ -127,9 +127,9 @@ class KendaraanService
                 'Cm'
             ),
 
-            'dimpanjang' => $type?->dimpanjang ?? '',
-            'dimlebar' => $type?->dimlebar ?? '',
-            'dimtinggi' => $type?->dimtinggi ?? '',
+            'dimpanjang' => $this->formatUnit($type?->dimpanjang ?? '', 'Cm'),
+            'dimlebar' => $this->formatUnit($type?->dimlebar ?? '', 'Cm'),
+            'dimtinggi' => $this->formatUnit($type?->dimtinggi ?? '', 'Cm'),
 
             'jbb' => $this->formatUnit($type?->kemjbb, 'Kg'),
             'orang' => $this->formatUnit($type?->kemorang, 'Kg'),
@@ -146,7 +146,9 @@ class KendaraanService
                 'Kg'
             ),
             'jbi' => $this->formatUnit($jbi, 'Kg'),
+            'konfsumbu' => $type?->konfigurasi_sumbu ?? '',
             'mst' => $this->formatUnit($type?->mst, 'Kg'),
+            'kelasjalan' => $type?->kelas_jalan ?? '',
 
             'kondisi' => $kondisi,
 

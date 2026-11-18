@@ -308,3 +308,39 @@
         min-height: 260px;
     }
 }
+
+.about-mission {
+    margin-top: 20px;
+}
+
+.about-mission h3 {
+    font-family: "Manrope", sans-serif;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--ink);
+}
+
+.about-mission ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.about-mission li {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    margin-bottom: 14px;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.95;
+}
+
+.about-mission .mission-number {
+    flex: 0 0 auto;
+    font: inherit;
+    color: inherit;
+}
