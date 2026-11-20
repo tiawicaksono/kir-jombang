@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\VehicleCheckController;
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\RequirementsController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,3 +19,6 @@ Route::view('/jadwal-pelayanan', 'pages.jadwal-pelayanan')->name('service.schedu
 // BERITA
 Route::get('/berita-pengumuman', [BeritaController::class, 'index'])->name('berita.index');
 Route::get('/berita/{id}', [BeritaController::class, 'show'])->whereNumber('id')->name('berita.show');
+// POLICY
+Route::get('/privacy-policy', [PrivacyPolicyController::class, 'index'])
+    ->name('privacy-policy');
